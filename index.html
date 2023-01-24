@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="./resources/style.css">
+
+	<title> NTT Jibo Wifi Setup</title>
+	<script type="text/javascript" src="resources/qrgenerator.js"></script>
+	<!-- <script type="text/javascript" src="resources/jquery.min.js"></script> -->
+  <script type="text/javascript" src="resources/qrcode.min.js"></script>
+  <script type="text/javascript" src="resources/bundle.js"></script>
+
+<body>
+
+  <div class="container" id="account">
+    <div class="card login border-0">
+      <p class="text-center">
+      <img src="images/nttlogo-h.png" class="img-thumbnail border-0" width="200" >
+      </p>
+      <div class="card-header">
+        <div class="row"> 
+        <div class="col">
+        </div>
+        <div class="col-6">
+            <h1>
+              <center>Jibo Wifi setup</center>
+            </h1>
+        </div>
+        <div class="col">
+        </div>
+      </div>
+    </div>
+      <div class="card-body">
+          <h4>Select the stack you want to use</h4>
+
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="region">Stack</label>
+            </div>
+            <select class="custom-select" id="region">
+              <option value="api">Production</option>
+              <option value="dev-entrypoint">Dev</option>
+              <option value="stg-entrypoint">Stg</option>
+              <option value="alpha-entrypoint">Alpha</option>
+              <option value="local-entrypoint">Local Dev</option>
+            </select>
+          </div>
+        
+          <h4>Enter your email and password of jibo account</h4>
+          <form>
+              <div class="form-group">
+                <label for="jibo-username">Email address</label>
+                <input type="email" class="form-control" id="jibo-username" placeholder="Enter email">
+              </div>
+              <div class="form-group">
+                <label for="jibo-password">Password</label>
+                <input type="password" class="form-control" id="jibo-password" placeholder="Enter your password">
+              </div>
+              <button type="button" class="btn btn-primary btn-lg main-buttons" data-toggle="modal" data-target="#accountCreationModal">Create a new account</button>
+              <button type="button" class="btn btn-success btn-lg main-buttons" onclick="jiboLogin()">Login</button>
+          </form>
+        
+          <div hidden id="accessKeyId"></div>
+          <div hidden id="secretAccessKey"></div>
+          <div hidden id="oobe_token"></div>
+      </div>
+    </div>
+  </div> <!-- CLOSING TAG FOR ACCOUNT DIV -->
+
+
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+
+  <div class="container" id="oobe_selection">
+    <div class="card login border-0">
+      <p class="text-center">
+      <img src="images/nttlogo-h.png" class="img-thumbnail border-0" width="200" >
+      </p>
+      <div class="card-header">
+        <div class="row">
+          <div class="col">
+          </div>
+          <div class="col-6">
+            <h1>
+              <center>Jibo Wifi setup</center>
+            </h1>
+          </div>
+          <div class="col">
+            <button type="button" class="btn btn-warning main-buttons" onclick="goBack(1)">Back</button>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <p class="text-center">
+          Select whether you are setting up a new Jibo or just changing the Wifi network
+        </p>
+        <div class="row buttons-row">
+          <div class="col-6">
+            <button type="button" class="btn btn-primary btn oobe-option" onclick="oobeSelection(true)">Setup new Jibo</button>
+          </div>
+          <div class="col-6">
+            <button type="button" class="btn btn-info btn oobe-option" onclick="oobeSelection(false)">Change Wifi</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> <!-- CLOSING TAG FOR OOBE SELECTION DIV -->
+
+
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+  <div class="container" id ="wifi_settings">
+    <div class="card">
+      <div class="card-header">
+        <div class="row">
+          <div class="col">
+            <h1>Enter your Wifi settings</h1>
+          </div>
+          <div class="col">
+            <button type="button" class="btn btn-warning main-buttons" onclick="goBack(2)">Back</button>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+  
+
+        <div class="input-group mb-3" id="wifi_selection">
+          <div class="input-group-prepend">
+            <label class="input-group-text" for="wifi_type">Select the wifi type</label>
+          </div>
+          <select onchange="toggleWifiType(this)" class="custom-select" id="wifi_type">
+            <option value="WPA-PSK">Home</option>
+            <option value="WPA-EAP">Enterprise</option>
+          </select>
+        </div>
+
+
+        <form>
+            <h3 class="enterprise" style="display: none">Enterprise Wifi</h3>
+            <h3 class="home" style="display: block">Home wifi</h3>
+            <div class="form-group">
+              <label for="wifiname">Wifi name:</label>
+              <input type="text" class="form-control" id="wifiname" placeholder="Enter SSID of network">
+            </div>
+            <div class="form-group enterprise" style="display: none;">
+              <label for="username">Username:</label>
+              <input type="text" class="form-control" id="username" placeholder="Enter your username">
+            </div>
+            <div class="form-group">
+              <label for="password">Password:</label>
+              <div class="row">
+                <div class="col">
+                  <div class="alert alert-warning" role="alert">
+                    Password length must be between 8 and 64 characters
+                  </div>
+                </div>
+              </div>
+              <input type="password" class="form-control" id="password" placeholder="Enter the password">
+            </div>
+
+            <br>
+            <h5>Advanced settings (it's fine to leave them empty!)</h5>
+
+            <div class="form-group">
+              <label for="ip">IP address:</label>
+              <input type="text" class="form-control" id="ip" placeholder="Enter the ip address">
+            </div>
+            <div class="form-group">
+              <label for="subnetMask">Subnet Mask:</label>
+              <input type="text" class="form-control" id="subnetMask" placeholder="Enter the subnet mask">
+            </div>
+            <div class="form-group">
+              <label for="router">Router IP:</label>
+              <input type="text" class="form-control" id="router" placeholder="Enter the ip of the router">
+            </div>
+            <div class="form-group">
+              <label for="dns1">DNS 1:</label>
+              <input type="text" class="form-control" id="dns1" placeholder="Enter the dns server">
+            </div>
+            <div class="form-group">
+              <label for="dns2">DNS 2:</label>
+              <input type="text" class="form-control" id="dns2" placeholder="Enter the dns server">
+            </div>
+            <button disabled type="button" id="generate-qr" class="btn btn-primary" onclick="loopGenerateQR()">Generate QR</button>
+        </form>
+
+        <br>
+
+        <div id="qrintro"></div>
+        <div id="qrcode0" style="margin: 50px; margin-bottom: 400px; display: none;"></div>
+        <div id="qrcode1" style="margin: 50px; margin-bottom: 400px; display: none;"></div>
+        <div id="qrcode2" style="margin: 50px; margin-bottom: 400px; display: none;"></div>
+        <div id="qrcode3" style="margin: 50px; margin-bottom: 400px; display: none;"></div>
+        <div id="qrcode4" style="margin: 50px; margin-bottom: 400px; display: none;"></div>
+        <div id="qrcode5" style="margin: 50px; margin-bottom: 400px; display: none;"></div>
+        <div id="qrcode6" style="margin: 50px; margin-bottom: 400px; display: none;"></div>
+        <div id="qrcode7" style="margin: 50px; margin-bottom: 400px; display: none;"></div>
+        <div id="qrcode8" style="margin: 50px; margin-bottom: 400px; display: none;"></div>
+        <div id="qrcode9" style="margin: 50px; margin-bottom: 400px; display: none;"></div>
+      </div>
+    </div>
+  
+  </div> <!--CLOSING TAG FOR WIFI SETTINGS DIV -->
+
+
+
+<!-- Modal for account creation -->
+<div class="modal" id="accountCreationModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+  
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">New account details</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+  
+        <!-- Modal body -->
+        <div class="modal-body">
+            <form>
+                <div class="form-group">
+                  <label for="account_creation_region">Stack</label>
+                  <select class="form-control" id="account_creation_region">
+                    <option value="api">Api</option>
+                    <option value="dev-entrypoint">Dev</option>
+                    <option value="stg-entrypoint">Stg</option>
+                    <option value="alpha-entrypoint">Alpha</option>
+                    <option value="local-entrypoint">Local Dev</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="jibo-new-username">Email address</label>
+                  <input type="email" class="form-control" id="jibo-new-username" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                  <label for="jibo-new-password">Password</label>
+                  <input type="password" class="form-control" id="jibo-new-password" placeholder="Enter your password">
+                  <small id="passwordHelp" class="form-text text-muted">Password must be at least 8 characters and contain one lowercase, one uppercase and one number.</small>
+                </div>
+                <div class="form-group">
+                    <label for="jibo-new-password-2">Confirm your password</label>
+                    <input type="password" class="form-control" id="jibo-new-password-2" placeholder="Confirm your password">
+                  </div>
+            </form>
+        </div>
+  
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button disabled id="create-account" type="button" class="btn btn-success" onclick="jiboSignin()">Create account</button>
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        </div>
+  
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Modal for information -->
+<div class="modal" id="messageModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+  
+        <!-- Modal Header -->
+        <div class="modal-header" style="background-color: #289be4;">
+          <h4 class="modal-title">INFO</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+  
+        <!-- Modal body -->
+        <div class="modal-body">
+            <div class="modal-body">
+                <h5 id="modal-info-message"></h5>
+              </div>
+        </div>
+  
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        </div>
+  
+      </div>
+    </div>
+  </div>
+
+<!-- Modal for errors -->
+  <div class="modal fade" id="errorModal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+    
+          <!-- Modal Header -->
+          <div class="modal-header" style="background-color: #e85e6c;">
+            <h4 class="modal-title">ERROR</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+    
+          <!-- Modal body -->
+          <div class="modal-body">
+              <div class="modal-body">
+                  <h5 id="modal-error-message"></h5>
+                </div>
+          </div>
+    
+          <!-- Modal footer -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+          </div>
+    
+        </div>
+      </div>
+    </div>
+
+
+
+
+</body>
+</html>
+
+<script>
+
+var oobeSelected = false;
+
+function loopGenerateQR() {
+    generateQR();
+    setTimeout(function () {
+        getOOBEToken();
+        loopGenerateQR();
+    }, 5000);
+}
+
+function getOOBEToken(){
+  oobe();
+}
+
+function jiboLogin(){
+  login();
+};
+
+function jiboSignin(){
+  signin();
+};
+
+
+function oobeSelection(oobe){
+  $('#oobe_selection').hide();
+  if(oobe){
+    oobeSelected = true;
+    $('#wifi_selection').hide();
+    var ent = document.getElementsByClassName("enterprise");
+    var home = document.getElementsByClassName("home");
+    document.getElementById("wifi_type").selectedIndex = 0;
+    for (var i=0; i<ent.length;i++){
+        ent[i].style.display='none';
+    }
+    for (var i=0; i<home.length;i++){
+        home[i].style.display='block';
+    }
+  }else{
+    oobeSelected = false;
+    $('#wifi_selection').show();
+  }
+  $('#wifi_settings').show();
+}
+
+function goBack(view){
+  if(view === 1){
+    $('#oobe_selection').hide();
+    $('#account').show();
+  }
+  if(view === 2){
+    oobeSelected = false;
+    $('#wifi_settings').hide();
+    $('#oobe_selection').show();
+  }
+}
+function toggleWifiType(e) {
+  //IF SELECTED ENTERPRISE HIDE HOME AND VICEVERSA
+  var strdisplay = e.options[e.selectedIndex].value;
+  var ent = document.getElementsByClassName("enterprise");
+  var home = document.getElementsByClassName("home");
+  if(strdisplay == "WPA-EAP") {
+    for (var i=0; i<ent.length;i++){
+        ent[i].style.display='block';
+    }
+    for (var i=0; i<home.length;i++){
+        home[i].style.display='none';
+    }
+  } 
+  if(strdisplay == "WPA-PSK") {
+    for (var i=0; i<ent.length;i++){
+        ent[i].style.display='none';
+    }
+    for (var i=0; i<home.length;i++){
+        home[i].style.display='block';
+    }
+  }
+}
+
+$(document).ready(function(){
+  $('#wifi_settings').hide();
+  $('#oobe_selection').hide();
+});
+
+  
+// DISABLE ACCOUNT CREATION BUTTON IF PASSWORDS DON'T MATCH OR EMAIL IS INCORRECT
+
+$('#jibo-new-password, #jibo-new-password-2').on('keyup', function () {
+  checkFieldsCompletion();
+});
+
+$('#jibo-new-username').on('keyup', function() {
+  checkFieldsCompletion();
+});
+
+$('#password').on('keyup', function() {
+  checkPasswordLength();
+});
+
+function checkFieldsCompletion(){
+  if(passwordValidation() && emailValidation()){  
+    $('#create-account').prop("disabled", false);
+  }else{
+    $('#create-account').prop("disabled", true);
+  }
+};
+
+function emailValidation(){
+  var email = $('#jibo-new-username').val();
+  var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(String(email).toLowerCase());
+};
+
+function passwordValidation(){
+  if($('#jibo-new-password').val() !== $('#jibo-new-password-2').val()){
+    return false;
+  }else if($('#jibo-new-password').val() === ""){
+    return false;
+  }else{
+    return true;
+  }
+}
+
+function passwordLengthValidation(){
+  if($('#password').val().length >= 8 && $('#password').val().length <= 64){
+    return true;
+  }else{
+    return false;
+  }
+}
+
+function checkPasswordLength(){
+  if(passwordLengthValidation()){  
+    $('#generate-qr').prop("disabled", false);
+  }else{
+    $('#generate-qr').prop("disabled", true);
+  }
+};
+
+</script>
