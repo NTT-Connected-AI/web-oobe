@@ -96,14 +96,15 @@
       </div>
       <div class="card-body">
         <p class="text-center">
-          Select whether you are setting up a new Jibo or just changing the Wifi network
+          Select <b>Setup Jibo Wifi</b> button to generate a QR code for Jibo. <br>
+          DO NOT use NTT Disruption Wifi button unless you know what this is for.
         </p>
         <div class="row buttons-row">
           <div class="col-6">
-            <button type="button" class="btn btn-primary btn oobe-option" onclick="oobeSelection(true)">Setup new Jibo</button>
+            <button type="button" class="btn btn-primary btn oobe-option" onclick="oobeSelection(true)">Setup Jibo Wifi</button>
           </div>
           <div class="col-6">
-            <button type="button" class="btn btn-info btn oobe-option" onclick="oobeSelection(false)">Change Wifi</button>
+            <button type="button" class="btn btn-secondary btn oobe-option" onclick="oobeSelection(false)"> NTT Disruption</button>
           </div>
         </div>
       </div>
@@ -115,13 +116,20 @@
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
   <div class="container" id ="wifi_settings">
-    <div class="card">
+    <div class="card login border-0">
+      <p class="text-center">
+      <img src="images/nttlogo-h.png" class="img-thumbnail border-0" width="200" >
+      </p>
       <div class="card-header">
-        <div class="row">
-          <div class="col">
-            <h1>Enter your Wifi settings</h1>
-          </div>
-          <div class="col">
+        <div class="row"> 
+        <div class="col">
+        </div>
+        <div class="col-6">
+            <h1>
+              <center>Jibo Wifi setup</center>
+            </h1>
+        </div>
+        <div class="col">
             <button type="button" class="btn btn-warning main-buttons" onclick="goBack(2)">Back</button>
           </div>
         </div>
