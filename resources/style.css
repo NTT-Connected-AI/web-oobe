@@ -1,0 +1,23 @@
+.login{
+  margin: auto;
+  margin-top: 10%;
+}
+
+.main-buttons{
+  float: right;
+  margin-left: 5px;
+}
+
+.oobe-option{
+  height: 400px;
+  width: 100%;
+  font-size: 50px;
+}
+
+.buttons-row{
+  margin-top: 30px;
+}
+
+#wifi_settings{
+  margin-top: 30px;
+}
